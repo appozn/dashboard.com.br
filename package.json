@@ -1,0 +1,27 @@
+{
+  "name": "ozneh-ia",
+  "version": "1.0.0",
+  "description": "OZNEH IA - Sinais inteligentes de compra e venda de criptomoedas com integração Binance",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "cryptocurrency",
+    "trading",
+    "signals",
+    "binance",
+    "bitcoin",
+    "ethereum",
+    "crypto"
+  ],
+  "author": "OZNEH IA",
+  "license": "MIT",
+  "dependencies": {
+    "chart.js": "^4.4.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}

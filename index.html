@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="OZNEH IA - Acessar conta para sinais inteligentes de criptomoedas">
+  <title>Acessar Conta - OZNEH IA</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="auth-page">
+  <div class="auth-card">
+    <header class="auth-header">
+      <div class="logo">
+        <img src="assets/logo.png" alt="Logo" id="logo-img" style="height: 60px;">
+      </div>
+      <h2 id="auth-title">Acessar Conta</h2>
+      <p class="auth-description" id="auth-description">Entre com suas credenciais para acessar o dashboard</p>
+    </header>
+
+    <!-- Login Form -->
+    <form id="login-form" class="auth-form">
+      <div class="form-group">
+        <label for="login-email">E-mail</label>
+        <input type="email" id="login-email" name="email" placeholder="seu@email.com" required>
+      </div>
+      <div class="form-group">
+        <label for="login-password">Senha</label>
+        <input type="password" id="login-password" name="password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn btn-primary"
+        style="width: 100%; justify-content: center; margin-top: var(--spacing-sm);">
+        Acessar Dashboard
+      </button>
+    </form>
+
+    <!-- Signup Form (Hidden by default) -->
+    <form id="signup-form" class="auth-form" style="display: none;">
+      <div class="form-group">
+        <label for="signup-name">Nome Completo</label>
+        <input type="text" id="signup-name" name="name" placeholder="Seu nome" required>
+      </div>
+      <div class="form-group">
+        <label for="signup-email">E-mail</label>
+        <input type="email" id="signup-email" name="email" placeholder="seu@email.com" required>
+      </div>
+      <div class="form-group">
+        <label for="signup-password">Senha</label>
+        <input type="password" id="signup-password" name="password" placeholder="Crie uma senha forte" required>
+      </div>
+      <button type="submit" class="btn btn-primary"
+        style="width: 100%; justify-content: center; margin-top: var(--spacing-sm);">
+        Criar Conta Agora
+      </button>
+    </form>
+
+    <a href="#" id="toggle-auth" class="auth-toggle">
+      Não tem uma conta? <span>Criar Conta</span>
+    </a>
+  </div>
+
+  <!-- Animated Background Elements -->
+  <div
+    style="position: absolute; top: -10%; left: -10%; width: 40%; height: 40%; background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%); z-index: 1;">
+  </div>
+  <div
+    style="position: absolute; bottom: -10%; right: -10%; width: 40%; height: 40%; background: radial-gradient(circle, rgba(96, 165, 250, 0.15) 0%, transparent 70%); z-index: 1;">
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    // Logo fallback
+    document.getElementById('logo-img').onerror = function () {
+      this.style.display = 'none';
+    };
+  </script>
+</body>
+
+</html>

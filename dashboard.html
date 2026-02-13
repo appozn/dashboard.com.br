@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - OZNEH IA</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/pricing.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="dashboard">
+        <!-- Sidebar Overlay -->
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <img src="assets/logo.png" alt="Logo" onerror="this.style.display='none'">
+                <button id="close-sidebar-btn" class="close-sidebar-btn">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <nav>
+                <ul class="sidebar-nav">
+                    <li><a href="#" class="active" data-page="dashboard"><span class="icon"><i
+                                    class="ri-dashboard-line"></i></span>
+                            Dashboard</a></li>
+                    <li><a href="#" data-page="signals"><span class="icon"><i class="ri-signal-tower-line"></i></span>
+                            Sinais</a></li>
+                    <li><a href="#" data-page="charts"><span class="icon"><i class="ri-line-chart-line"></i></span>
+                            Gráficos</a></li>
+                    <li><a href="#" data-page="portfolio"><span class="icon"><i class="ri-briefcase-line"></i></span>
+                            Portfólio</a></li>
+                    <li><a href="#" data-page="alerts"><span class="icon"><i class="ri-notification-line"></i></span>
+                            Alertas</a></li>
+                    <li><a href="#" data-page="settings"><span class="icon"><i class="ri-settings-line"></i></span>
+                            Configurações</a></li>
+                    <li><a href="#" id="logout-btn"><span class="icon"><i class="ri-logout-box-line"></i></span>
+                            Sair</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <!-- Dashboard Page -->
+            <div id="page-dashboard" class="page-content">
+                <!-- Trial Banner -->
+                <div id="trial-banner" class="trial-banner" style="display: none;">
+                    <div class="banner-content">
+                        <i class="ri-time-line"></i>
+                        <span>Período de Teste Gratuito:</span>
+                        <strong id="trial-countdown">Calculando...</strong>
+                    </div>
+                    <button class="btn-upgrade"
+                        onclick="document.getElementById('pricing-overlay').classList.add('active')">Assinar
+                        Agora</button>
+                </div>
+
+                <!-- Header -->
+                <div class="dashboard-header">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <button id="mobile-menu-btn" class="mobile-menu-btn">
+                            <i class="ri-menu-line"></i>
+                        </button>
+                        <div>
+                            <h1>Dashboard</h1>
+                            <p style="color: var(--text-muted); margin: 0;">Bem-vindo ao OZNEH IA</p>
+                        </div>
+                    </div>
+                    <div class="user-info">
+                        <div>
+                            <p style="margin: 0; font-weight: 600;">Trader</p>
+                            <p style="margin: 0; font-size: var(--font-size-sm); color: var(--text-muted);">Plano Pro
+                            </p>
+                        </div>
+                        <div class="user-avatar">T</div>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Portfólio Total</span>
+                            <span class="stat-icon"><i class="ri-money-dollar-circle-line"></i></span>
+                        </div>
+                        <div class="stat-value" id="totalPortfolio">$0.00</div>
+                        <div class="stat-change positive">
+                            <span>↑</span>
+                            <span id="portfolioChange">+0.00%</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Sinais Ativos</span>
+                            <span class="stat-icon"><i class="ri-focus-line"></i></span>
+                        </div>
+                        <div class="stat-value" id="activeSignals">0</div>
+                        <div class="stat-change">
+                            <span id="signalsText">Analisando...</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Precisão 24h</span>
+                            <span class="stat-icon"><i class="ri-checkbox-circle-line"></i></span>
+                        </div>
+                        <div class="stat-value" id="accuracy">0%</div>
+                        <div class="stat-change positive">
+                            <span>Taxa de acerto</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Mercado</span>
+                            <span class="stat-icon"><i class="ri-bar-chart-line"></i></span>
+                        </div>
+                        <div class="stat-value" id="marketStatus">...</div>
+                        <div class="stat-change">
+                            <span id="marketTrend">Carregando...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h2>Gráfico de Preços</h2>
+                        <div class="chart-controls">
+                            <button class="active" data-crypto="BTCUSDT">BTC</button>
+                            <button data-crypto="ETHUSDT">ETH</button>
+                            <button data-crypto="BNBUSDT">BNB</button>
+                        </div>
+                    </div>
+                    <canvas id="priceChart"></canvas>
+                </div>
+
+                <!-- Crypto Grid -->
+                <h2 style="margin-bottom: var(--spacing-lg);">Criptomoedas Monitoradas</h2>
+                <div class="crypto-grid" id="cryptoGrid">
+                    <!-- Loading state -->
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Conectando à Binance...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signals Page -->
+            <div id="page-signals" class="page-content" style="display: none;">
+                <div class="dashboard-header">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <button class="mobile-menu-btn">
+                            <i class="ri-menu-line"></i>
+                        </button>
+                        <div>
+                            <h1>Sinais de Trading</h1>
+                            <p style="color: var(--text-muted); margin: 0;">Análise técnica em tempo real</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="signals-container">
+                    <h2 style="margin-bottom: var(--spacing-lg);">Sinais Ativos</h2>
+                    <div class="crypto-grid" id="signalsGrid">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p>Carregando sinais...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Page -->
+            <div id="page-charts" class="page-content" style="display: none;">
+                <div class="dashboard-header">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <button class="mobile-menu-btn">
+                            <i class="ri-menu-line"></i>
+                        </button>
+                        <div>
+                            <h1>Gráficos Avançados</h1>
+                            <p style="color: var(--text-muted); margin: 0;">Análise técnica detalhada</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h2>Selecione uma Criptomoeda</h2>
+                        <div class="chart-controls" style="flex-wrap: wrap; gap: 5px;">
+                            <button class="active" data-crypto="BTCUSDT">BTC</button>
+                            <button data-crypto="ETHUSDT">ETH</button>
+                            <button data-crypto="BNBUSDT">BNB</button>
+                            <button data-crypto="XRPUSDT">XRP</button>
+                            <button data-crypto="SOLUSDT">SOL</button>
+                            <button data-crypto="ADAUSDT">ADA</button>
+                            <button data-crypto="DOTUSDT">DOT</button>
+                            <button data-crypto="AVAXUSDT">AVAX</button>
+                            <button data-crypto="LINKUSDT">LINK</button>
+                            <button data-crypto="POLUSDT">POL</button>
+                            <button data-crypto="TRXUSDT">TRX</button>
+                            <button data-crypto="LTCUSDT">LTC</button>
+                            <button data-crypto="USDCUSDT">USDC</button>
+                            <button data-crypto="ARBUSDT">ARB</button>
+                            <button data-crypto="APTUSDT">APT</button>
+                            <button data-crypto="NEARUSDT">NEAR</button>
+                            <button data-crypto="ICPUSDT">ICP</button>
+                            <button data-crypto="RENDERUSDT">RENDER</button>
+                            <button data-crypto="SHIBUSDT">SHIB</button>
+                            <button data-crypto="PEPEUSDT">PEPE</button>
+                            <button data-crypto="TAOUSDT">TAO</button>
+                            <button data-crypto="FTMUSDT">FTM</button>
+                            <button data-crypto="ATOMUSDT">ATOM</button>
+                            <button data-crypto="ALGOUSDT">ALGO</button>
+                            <button data-crypto="XTZUSDT">XTZ</button>
+                            <button data-crypto="EOSUSDT">EOS</button>
+                            <button data-crypto="HNTUSDT">HNT</button>
+                            <button data-crypto="TONUSDT">TON</button>
+                            <button data-crypto="ZECUSDT">ZEC</button>
+                            <button data-crypto="DOGEUSDT">DOGE</button>
+                        </div>
+                    </div>
+                    <canvas id="advancedChart"></canvas>
+                </div>
+
+                <div class="indicators-panel" style="margin-top: var(--spacing-lg);">
+                    <h2 style="margin-bottom: var(--spacing-lg);">Indicadores Técnicos</h2>
+                    <div class="stats-grid" id="indicatorsGrid">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title">RSI (14)</span>
+                                <span class="stat-icon"><i class="ri-pulse-line"></i></span>
+                            </div>
+                            <div class="stat-value" id="rsiValue">--</div>
+                            <div class="stat-change">
+                                <span id="rsiStatus">Calculando...</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title">MACD</span>
+                                <span class="stat-icon"><i class="ri-line-chart-line"></i></span>
+                            </div>
+                            <div class="stat-value" id="macdValue">--</div>
+                            <div class="stat-change">
+                                <span id="macdStatus">Calculando...</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title">SMA 20</span>
+                                <span class="stat-icon"><i class="ri-bar-chart-line"></i></span>
+                            </div>
+                            <div class="stat-value" id="sma20Value">--</div>
+                            <div class="stat-change">
+                                <span id="sma20Status">Calculando...</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title">Volume 24h</span>
+                                <span class="stat-icon"><i class="ri-stock-line"></i></span>
+                            </div>
+                            <div class="stat-value" id="volumeValue">--</div>
+                            <div class="stat-change">
+                                <span id="volumeStatus">Calculando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Portfolio Page -->
+            <div id="page-portfolio" class="page-content" style="display: none;">
+                <div class="dashboard-header">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <button class="mobile-menu-btn">
+                            <i class="ri-menu-line"></i>
+                        </button>
+                        <div>
+                            <h1>Meu Portfólio</h1>
+                            <p style="color: var(--text-muted); margin: 0;">Gerencie seus ativos</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Valor Total</span>
+                            <span class="stat-icon"><i class="ri-wallet-line"></i></span>
+                        </div>
+                        <div class="stat-value">$12,450.00</div>
+                        <div class="stat-change positive">
+                            <span>↑ +5.2%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Lucro/Perda</span>
+                            <span class="stat-icon"><i class="ri-funds-line"></i></span>
+                        </div>
+                        <div class="stat-value">+$647.50</div>
+                        <div class="stat-change positive">
+                            <span>Últimas 24h</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Ativos</span>
+                            <span class="stat-icon"><i class="ri-coin-line"></i></span>
+                        </div>
+                        <div class="stat-value">6</div>
+                        <div class="stat-change">
+                            <span>Criptomoedas</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Melhor Ativo</span>
+                            <span class="stat-icon"><i class="ri-trophy-line"></i></span>
+                        </div>
+                        <div class="stat-value">BTC</div>
+                        <div class="stat-change positive">
+                            <span>+12.5%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="margin: var(--spacing-xl) 0 var(--spacing-lg);">Seus Ativos</h2>
+                <div class="crypto-grid" id="portfolioGrid">
+                    <!-- Portfolio items will be populated here -->
+                </div>
+            </div>
+
+            <!-- Alerts Page -->
+            <div id="page-alerts" class="page-content" style="display: none;">
+                <div class="dashboard-header">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <button class="mobile-menu-btn">
+                            <i class="ri-menu-line"></i>
+                        </button>
+                        <div>
+                            <h1>Alertas</h1>
+                            <p style="color: var(--text-muted); margin: 0;">Configure notificações de preço</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="alert('Funcionalidade em desenvolvimento')">
+                        <i class="ri-add-line"></i> Novo Alerta
+                    </button>
+                </div>
+
+                <div class="alerts-container">
+                    <h2 style="margin-bottom: var(--spacing-lg);">Alertas Ativos</h2>
+                    <div class="feature-card" style="text-align: center; padding: var(--spacing-2xl);">
+                        <div class="feature-icon" style="margin: 0 auto var(--spacing-lg);">
+                            <i class="ri-notification-line"></i>
+                        </div>
+                        <h3>Nenhum alerta configurado</h3>
+                        <p style="color: var(--text-muted);">Crie alertas de preço para receber notificações quando suas
+                            criptomoedas atingirem valores específicos.</p>
+                        <button class="btn btn-primary" style="margin-top: var(--spacing-lg);"
+                            onclick="alert('Funcionalidade em desenvolvimento')">
+                            Criar Primeiro Alerta
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="page-settings" class="page-content" style="display: none;">
+                <div class="dashboard-header">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <button class="mobile-menu-btn">
+                            <i class="ri-menu-line"></i>
+                        </button>
+                        <div>
+                            <h1>Configurações</h1>
+                            <p style="color: var(--text-muted); margin: 0;">Personalize sua experiência</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-container">
+                    <div class="feature-card" style="margin-bottom: var(--spacing-lg);">
+                        <h3><i class="ri-key-line"></i> API Binance</h3>
+                        <p style="color: var(--text-muted); margin-bottom: var(--spacing-md);">Configure suas chaves API
+                            para trading automático</p>
+                        <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+                            <input type="text" placeholder="API Key"
+                                style="padding: var(--spacing-sm); background: var(--primary-dark); border: 1px solid rgba(37, 99, 235, 0.3); border-radius: var(--radius-md); color: var(--text-primary);">
+                            <input type="password" placeholder="Secret Key"
+                                style="padding: var(--spacing-sm); background: var(--primary-dark); border: 1px solid rgba(37, 99, 235, 0.3); border-radius: var(--radius-md); color: var(--text-primary);">
+                            <button class="btn btn-primary" onclick="alert('Chaves salvas com sucesso!')">Salvar
+                                Chaves</button>
+                        </div>
+                    </div>
+
+                    <div class="feature-card" style="margin-bottom: var(--spacing-lg);">
+                        <h3><i class="ri-notification-line"></i> Notificações</h3>
+                        <p style="color: var(--text-muted); margin-bottom: var(--spacing-md);">Gerencie suas
+                            preferências de notificação</p>
+                        <div style="display: flex; flex-direction: column; gap: var(--spacing-sm);">
+                            <label style="display: flex; align-items: center; gap: var(--spacing-sm); cursor: pointer;">
+                                <input type="checkbox" checked> Alertas de sinais de compra/venda
+                            </label>
+                            <label style="display: flex; align-items: center; gap: var(--spacing-sm); cursor: pointer;">
+                                <input type="checkbox" checked> Mudanças significativas de preço
+                            </label>
+                            <label style="display: flex; align-items: center; gap: var(--spacing-sm); cursor: pointer;">
+                                <input type="checkbox"> Relatórios diários
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3><i class="ri-palette-line"></i> Aparência</h3>
+                        <p style="color: var(--text-muted); margin-bottom: var(--spacing-md);">Personalize a interface
+                        </p>
+                        <div style="display: flex; gap: var(--spacing-md);">
+                            <button class="btn btn-secondary">Tema Escuro (Atual)</button>
+                            <button class="btn btn-secondary" disabled style="opacity: 0.5;">Tema Claro (Em
+                                breve)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Pricing Overlay -->
+    <div id="pricing-overlay" class="pricing-overlay">
+        <div class="expiration-alert">
+            <i class="ri-time-line"></i> Seu período de teste gratuito de 3 dias expirou.
+        </div>
+
+        <div class="pricing-header">
+            <h2>Escolha seu Plano</h2>
+            <p style="color: var(--text-muted);">Desbloqueie todo o potêncial do OZNEH IA</p>
+        </div>
+
+        <div class="pricing-container">
+            <!-- Basic Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Plano Essencial</div>
+                <div class="plan-description">Ideal para iniciantes</div>
+                <div class="plan-price">
+                    <span class="currency">R$</span>
+                    <span class="amount">39,90</span>
+                    <span class="period">/mês</span>
+                </div>
+                <ul class="plan-features">
+                    <li><i class="ri-check-line"></i> Cobrança mensal recorrente</li>
+                    <li><i class="ri-check-line"></i> Recursos essenciais liberados</li>
+                    <li><i class="ri-check-line"></i> Acesso ao dashboard</li>
+                </ul>
+                <div class="pricing-note">Este é o único plano com cobrança mensal.</div>
+                <button class="plan-btn"
+                    onclick="window.open('https://go.tribopay.com.br/6cpjjbekjq', '_blank')">Começar
+                    agora</button>
+            </div>
+
+            <!-- Advanced Plan -->
+            <div class="pricing-card featured">
+                <div class="popular-badge">Mais Popular</div>
+                <div class="plan-name">Plano Avançado</div>
+                <div class="plan-description">Ideal para traders intermediários</div>
+                <div class="plan-price">
+                    <span class="currency">R$</span>
+                    <span class="amount">70,00</span>
+                    <span class="period">único</span>
+                </div>
+                <ul class="plan-features">
+                    <li><i class="ri-check-line"></i> Pagamento Único</li>
+                    <li><i class="ri-check-line"></i> Acesso completo ao sistema</li>
+                    <li><i class="ri-check-line"></i> IA ativa para análises</li>
+                    <li><i class="ri-check-line"></i> Gráficos avançados</li>
+                </ul>
+                <button class="plan-btn" onclick="window.open('https://go.tribopay.com.br/z08mn', '_blank')">Assinar
+                    agora</button>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Plano Pro</div>
+                <div class="plan-description">Profissional</div>
+                <div class="plan-price">
+                    <span class="currency">R$</span>
+                    <span class="amount">120,00</span>
+                    <span class="period">único</span>
+                </div>
+                <ul class="plan-features">
+                    <li><i class="ri-check-line"></i> Pagamento Único</li>
+                    <li><i class="ri-check-line"></i> Acesso vitalício</li>
+                    <li><i class="ri-check-line"></i> Todos os recursos liberados</li>
+                    <li><i class="ri-check-line"></i> Indicadores avançados</li>
+                    <li><i class="ri-check-line"></i> Dashboard completo</li>
+                    <li><i class="ri-check-line"></i> Suporte prioritário</li>
+                </ul>
+                <button class="plan-btn" onclick="window.open('https://go.tribopay.com.br/uy3ax', '_blank')">Assinar
+                    agora</button>
+            </div>
+        </div>
+
+        <button id="btn-back-dashboard" class="btn-secondary"
+            style="margin-top: 20px; background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted);"
+            onclick="document.getElementById('pricing-overlay').classList.remove('active'); document.body.style.overflow = '';">
+            Voltar para o Dashboard
+        </button>
+    </div>
+
+    <!-- Connection Status -->
+    <div class="connection-status">
+        <div class="status-dot disconnected" id="statusDot"></div>
+        <span id="statusText">Conectando...</span>
+    </div>
+
+    <script src="js/binance.js"></script>
+    <script src="js/signals.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>
